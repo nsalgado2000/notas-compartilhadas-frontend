@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const SNAKE_GAME_SIZE = 15;
@@ -20,9 +20,20 @@ export default function Home() {
   const [gameRunning, setGameRunning] = useState(false);
   const [score, setScore] = useState(0);
 
+  const formRef = useRef(null);
+
   useEffect(() => {
     fetchNotas();
   }, []);
+
+  useEffect(() => {
+    if (showForm && editingNota && formRef.current) {
+      formRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [showForm, editingNota]);
 
   useEffect(() => {
     if (!loading) return;
@@ -642,7 +653,7 @@ export default function Home() {
         </div>
 
         {showForm && (
-          <div className="input-terminal">
+          <div ref={formRef} className="input-terminal">
             <form onSubmit={createNota} className="terminal-form">
               <div className="input-group">
                 <label>SUBJECT:</label>
