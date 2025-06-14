@@ -112,7 +112,7 @@ export default function Home() {
     } catch (error) {
       console.error("Erro ao carregar notas:", error);
     } finally {
-      setTimeout(() => setLoading(false), 2000);
+      setTimeout(() => setLoading(false), 3000);
     }
   };
 
@@ -169,52 +169,57 @@ export default function Home() {
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="crt-effect">
-          <div className="terminal-window">
-            <div className="terminal-header">
-              <span>◉ ◉ ◉</span>
-              <span>CARREGANDO CIBERESPAÇO...</span>
-            </div>
-            <div className="terminal-content">
-              <div className="loading-text">
-                <div className="glitch" data-text="ACESSANDO REDE NEURAL...">
-                  ACESSANDO REDE NEURAL...
-                </div>
+        <div className="static-overlay"></div>
+        <div className="terminal-window">
+          <div className="terminal-header">
+            <span className="terminal-dots">● ● ●</span>
+            <span className="terminal-title">CONNECTING TO THE WIRED...</span>
+          </div>
+          <div className="terminal-content">
+            <div className="loading-text">
+              <div
+                className="glitch-text"
+                data-text="PRESENT DAY... PRESENT TIME..."
+              >
+                PRESENT DAY... PRESENT TIME...
+              </div>
+              <div className="progress-container">
                 <div className="progress-bar">
                   <div className="progress-fill"></div>
                 </div>
+                <div className="progress-text">LOADING PROTOCOL 7...</div>
               </div>
+            </div>
 
-              <div className="snake-game">
-                <h3>🐍 CYBER COBRA 2000 🐍</h3>
-                <div className="game-info">
-                  Pontos: {score} |{" "}
-                  {gameRunning ? "JOGANDO" : "PRESSIONE ESPAÇO PARA INICIAR"}
-                </div>
-                <div className="game-board">
-                  {Array.from({
-                    length: SNAKE_GAME_SIZE * SNAKE_GAME_SIZE,
-                  }).map((_, index) => {
-                    const x = index % SNAKE_GAME_SIZE;
-                    const y = Math.floor(index / SNAKE_GAME_SIZE);
-                    const isSnake = snake.some(
-                      (segment) => segment.x === x && segment.y === y
-                    );
-                    const isFood = food.x === x && food.y === y;
+            <div className="snake-game">
+              <div className="game-title">NAVI SYSTEM</div>
+              <div className="game-info">
+                SCORE: {score} | STATUS:{" "}
+                {gameRunning ? "ACTIVE" : "PRESS SPACE TO INITIALIZE"}
+              </div>
+              <div className="game-board">
+                {Array.from({
+                  length: SNAKE_GAME_SIZE * SNAKE_GAME_SIZE,
+                }).map((_, index) => {
+                  const x = index % SNAKE_GAME_SIZE;
+                  const y = Math.floor(index / SNAKE_GAME_SIZE);
+                  const isSnake = snake.some(
+                    (segment) => segment.x === x && segment.y === y
+                  );
+                  const isFood = food.x === x && food.y === y;
 
-                    return (
-                      <div
-                        key={index}
-                        className={`game-cell ${isSnake ? "snake" : ""} ${
-                          isFood ? "food" : ""
-                        }`}
-                      />
-                    );
-                  })}
-                </div>
-                <div className="game-controls">
-                  Use as setas para mover • Espaço para iniciar
-                </div>
+                  return (
+                    <div
+                      key={index}
+                      className={`game-cell ${isSnake ? "snake" : ""} ${
+                        isFood ? "food" : ""
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+              <div className="game-controls">
+                USE ARROW KEYS TO NAVIGATE THE WIRED
               </div>
             </div>
           </div>
@@ -223,89 +228,108 @@ export default function Home() {
         <style jsx>{`
           .loading-container {
             min-height: 100vh;
-            background: linear-gradient(45deg, #000428, #004e92);
+            background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: "Courier New", monospace;
+            position: relative;
             overflow: hidden;
           }
 
-          .crt-effect {
-            position: relative;
-            background: radial-gradient(
-              ellipse at center,
-              rgba(0, 255, 0, 0.1) 0%,
-              transparent 70%
-            );
-          }
-
-          .crt-effect::before {
-            content: "";
-            position: absolute;
+          .static-overlay {
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-              0deg,
-              transparent,
-              transparent 2px,
-              rgba(0, 255, 0, 0.03) 2px,
-              rgba(0, 255, 0, 0.03) 4px
-            );
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at 20% 80%,
+                rgba(120, 119, 198, 0.3) 0%,
+                transparent 50%
+              ),
+              radial-gradient(
+                circle at 80% 20%,
+                rgba(255, 119, 198, 0.15) 0%,
+                transparent 50%
+              ),
+              radial-gradient(
+                circle at 40% 40%,
+                rgba(120, 119, 198, 0.1) 0%,
+                transparent 50%
+              );
+            animation: static-noise 0.1s infinite;
             pointer-events: none;
-            animation: scanlines 0.1s linear infinite;
+            z-index: 1;
           }
 
-          @keyframes scanlines {
-            0% {
-              transform: translateY(0);
-            }
+          @keyframes static-noise {
+            0%,
             100% {
-              transform: translateY(4px);
+              opacity: 1;
+            }
+            50% {
+              opacity: 0.8;
             }
           }
 
           .terminal-window {
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
-            min-width: 500px;
-            max-width: 600px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid #7877c6;
+            box-shadow: 0 0 50px rgba(120, 119, 198, 0.3),
+              inset 0 0 50px rgba(0, 0, 0, 0.5);
+            min-width: 600px;
+            max-width: 700px;
+            position: relative;
+            z-index: 2;
           }
 
           .terminal-header {
-            background: linear-gradient(90deg, #00ff00, #00cc00);
-            color: black;
+            background: linear-gradient(90deg, #1a1a1a, #2a2a2a);
+            color: #7877c6;
             padding: 8px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: bold;
-            font-size: 12px;
+            font-size: 11px;
+            border-bottom: 1px solid #333;
+          }
+
+          .terminal-dots {
+            color: #ff6b6b;
+          }
+
+          .terminal-title {
+            color: #7877c6;
+            font-weight: normal;
           }
 
           .terminal-content {
-            padding: 20px;
-            color: #00ff00;
+            padding: 30px;
+            color: #7877c6;
+            background: repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 2px,
+              rgba(120, 119, 198, 0.03) 2px,
+              rgba(120, 119, 198, 0.03) 4px
+            );
           }
 
           .loading-text {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
           }
 
-          .glitch {
-            font-size: 18px;
-            font-weight: bold;
+          .glitch-text {
+            font-size: 16px;
             position: relative;
-            animation: glitch 2s infinite;
+            animation: subtle-glitch 4s infinite;
+            margin-bottom: 20px;
           }
 
-          .glitch::before,
-          .glitch::after {
+          .glitch-text::before,
+          .glitch-text::after {
             content: attr(data-text);
             position: absolute;
             top: 0;
@@ -314,34 +338,34 @@ export default function Home() {
             height: 100%;
           }
 
-          .glitch::before {
-            animation: glitch-1 0.5s infinite;
-            color: #ff0000;
+          .glitch-text::before {
+            animation: glitch-1 0.3s infinite;
+            color: #ff77c6;
             z-index: -1;
           }
 
-          .glitch::after {
-            animation: glitch-2 0.5s infinite;
-            color: #0000ff;
+          .glitch-text::after {
+            animation: glitch-2 0.3s infinite;
+            color: #77c6ff;
             z-index: -2;
           }
 
-          @keyframes glitch {
+          @keyframes subtle-glitch {
             0%,
             100% {
               transform: translate(0);
             }
             20% {
-              transform: translate(-2px, 2px);
+              transform: translate(-1px, 1px);
             }
             40% {
-              transform: translate(-2px, -2px);
+              transform: translate(-1px, -1px);
             }
             60% {
-              transform: translate(2px, 2px);
+              transform: translate(1px, 1px);
             }
             80% {
-              transform: translate(2px, -2px);
+              transform: translate(1px, -1px);
             }
           }
 
@@ -351,10 +375,10 @@ export default function Home() {
               transform: translate(0);
             }
             10% {
-              transform: translate(-2px, -2px);
+              transform: translate(-1px, -1px);
             }
             20% {
-              transform: translate(2px, 2px);
+              transform: translate(1px, 1px);
             }
           }
 
@@ -364,29 +388,33 @@ export default function Home() {
               transform: translate(0);
             }
             30% {
-              transform: translate(2px, -2px);
+              transform: translate(1px, -1px);
             }
             60% {
-              transform: translate(-2px, 2px);
+              transform: translate(-1px, 1px);
             }
+          }
+
+          .progress-container {
+            margin-top: 20px;
           }
 
           .progress-bar {
             width: 100%;
-            height: 20px;
-            background: rgba(0, 255, 0, 0.2);
-            border: 1px solid #00ff00;
-            margin-top: 15px;
+            height: 2px;
+            background: rgba(120, 119, 198, 0.2);
+            border: none;
+            margin-bottom: 10px;
             overflow: hidden;
           }
 
           .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #00ff00, #00cc00);
-            animation: loading 3s ease-in-out infinite;
+            background: #7877c6;
+            animation: loading-progress 4s ease-in-out infinite;
           }
 
-          @keyframes loading {
+          @keyframes loading-progress {
             0% {
               width: 0%;
             }
@@ -398,28 +426,36 @@ export default function Home() {
             }
           }
 
-          .snake-game {
+          .progress-text {
+            font-size: 12px;
+            color: #666;
             text-align: center;
-            margin-top: 20px;
           }
 
-          .snake-game h3 {
-            color: #ff00ff;
-            text-shadow: 0 0 10px #ff00ff;
-            margin-bottom: 10px;
+          .snake-game {
+            text-align: center;
+            margin-top: 30px;
+          }
+
+          .game-title {
+            color: #7877c6;
+            font-size: 14px;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
           }
 
           .game-info {
-            margin-bottom: 15px;
-            font-size: 14px;
+            margin-bottom: 20px;
+            font-size: 11px;
+            color: #666;
           }
 
           .game-board {
             display: grid;
             grid-template-columns: repeat(${SNAKE_GAME_SIZE}, 1fr);
             gap: 1px;
-            background: #333;
-            border: 2px solid #00ff00;
+            background: #111;
+            border: 1px solid #333;
             margin: 0 auto;
             width: 300px;
             height: 300px;
@@ -431,19 +467,20 @@ export default function Home() {
           }
 
           .game-cell.snake {
-            background: #00ff00;
-            box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.8);
+            background: #7877c6;
+            box-shadow: inset 0 0 3px rgba(120, 119, 198, 0.8);
           }
 
           .game-cell.food {
-            background: #ff0000;
-            box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.8);
+            background: #ff77c6;
+            box-shadow: inset 0 0 3px rgba(255, 119, 198, 0.8);
           }
 
           .game-controls {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #888;
+            margin-top: 20px;
+            font-size: 10px;
+            color: #444;
+            letter-spacing: 1px;
           }
         `}</style>
       </div>
@@ -451,123 +488,109 @@ export default function Home() {
   }
 
   return (
-    <div className="cyber-container">
-      <div className="matrix-bg"></div>
+    <div className="lain-container">
+      <div className="static-bg"></div>
+      <div className="scan-lines"></div>
 
-      <header className="cyber-header">
+      <header className="lain-header">
         <div className="header-content">
-          <h1 className="cyber-title">
-            <span className="glitch-text" data-text="◊ CYBER MURAL 2000 ◊">
-              ◊ CYBER MURAL 2000 ◊
+          <div className="system-info">
+            <span className="system-status">● CONNECTED</span>
+            <span className="protocol">PROTOCOL 7</span>
+          </div>
+          <h1 className="main-title">
+            <span className="title-glitch" data-text="THE WIRED">
+              THE WIRED
             </span>
           </h1>
-          <div className="subtitle">
-            ★ REDE NEURAL COMPARTILHADA ★ DEIXE SUA MARCA ★
-          </div>
-        </div>
-
-        <div className="visitor-counter">
-          <img
-            src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wjRLEuQRNnGt7QpVdNhHJBkaIrdoyiiRWAER+qD7YrDNkFxM8s5W2W+kSgwAAIfkECQoAAAAsAAAAABAAEAAAAzQIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wjRLEuQRNnGt7QpVdNhHJBkaIrdoyiiRWAER+qD7YrDNkFxM8s5W2W+kSgwAAOw=="
-            alt="Carregando..."
-          />
-          VISITANTES: {Math.floor(Math.random() * 9999) + 1000}
+          <div className="subtitle">PRESENT DAY... PRESENT TIME...</div>
         </div>
       </header>
 
       <div className="main-content">
-        <div className="action-bar">
+        <div className="control-panel">
           <button
-            className="cyber-button add-btn"
+            className="lain-button"
             onClick={() =>
               editingNota ? cancelEdit() : setShowForm(!showForm)
             }
           >
-            {showForm ? "✖ CANCELAR" : "+ ADICIONAR MENSAGEM"}
+            {showForm ? "DISCONNECT" : "CONNECT"}
           </button>
 
-          <div className="status-bar">
-            <span className="blink">● ONLINE</span>
-            <span>LINK NEURAL ATIVO</span>
+          <div className="status-display">
+            <span className="status-indicator">NAVI STATUS: ACTIVE</span>
           </div>
         </div>
 
         {showForm && (
-          <div className="form-container">
-            <form onSubmit={createNota} className="cyber-form">
-              <div className="form-group">
-                <label>ASSUNTO:</label>
+          <div className="input-terminal">
+            <form onSubmit={createNota} className="terminal-form">
+              <div className="input-group">
+                <label>SUBJECT:</label>
                 <input
                   type="text"
                   value={newNota.title}
                   onChange={(e) =>
                     setNewNota({ ...newNota, title: e.target.value })
                   }
-                  className="cyber-input"
-                  placeholder={
-                    editingNota
-                      ? "Edite o título da transmissão..."
-                      : "Digite o título da transmissão..."
-                  }
+                  className="terminal-input"
+                  placeholder="Enter transmission subject..."
                   maxLength={50}
                 />
               </div>
 
-              <div className="form-group">
-                <label>MENSAGEM:</label>
+              <div className="input-group">
+                <label>MESSAGE:</label>
                 <textarea
                   value={newNota.description}
                   onChange={(e) =>
                     setNewNota({ ...newNota, description: e.target.value })
                   }
-                  className="cyber-textarea"
-                  placeholder={
-                    editingNota
-                      ? "Edite sua mensagem..."
-                      : "Transmita sua mensagem para a rede..."
-                  }
+                  className="terminal-textarea"
+                  placeholder="Transmit your thoughts to the wired..."
                   rows={4}
                   maxLength={500}
                 />
               </div>
 
-              <button type="submit" className="cyber-button submit-btn">
-                {editingNota ? "⚡ ATUALIZAR ⚡" : "⚡ TRANSMITIR ⚡"}
+              <button type="submit" className="lain-button submit">
+                {editingNota ? "UPDATE" : "TRANSMIT"}
               </button>
             </form>
           </div>
         )}
 
-        <div className="notes-grid">
+        <div className="message-grid">
           {notas.map((nota) => (
             <div
               key={nota._id}
-              className="note-card"
+              className="message-card"
               onClick={() => startEdit(nota)}
             >
-              <div className="note-header">
-                <span className="note-id">
-                  #{nota._id.slice(-6).toUpperCase()}
+              <div className="message-header">
+                <span className="message-id">
+                  ID: {nota._id.slice(-6).toUpperCase()}
                 </span>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     deleteNota(nota._id);
                   }}
-                  className="delete-btn"
-                  title="Deletar transmissão"
+                  className="delete-button"
+                  title="Delete transmission"
                 >
-                  ✖
+                  ×
                 </button>
               </div>
 
-              <h3 className="note-title">{nota.title}</h3>
-              <p className="note-description">{nota.description}</p>
+              <h3 className="message-title">{nota.title}</h3>
+              <p className="message-content">{nota.description}</p>
 
-              <div className="note-footer">
+              <div className="message-footer">
                 <span className="timestamp">
-                  TRANSMITIDO:{" "}
-                  {new Date().toLocaleDateString("pt-BR", {
+                  TRANSMITTED:{" "}
+                  {new Date().toLocaleDateString("en-US", {
                     year: "2-digit",
                     month: "2-digit",
                     day: "2-digit",
@@ -579,121 +602,123 @@ export default function Home() {
         </div>
 
         {notas.length === 0 && (
-          <div className="empty-state">
+          <div className="empty-wired">
             <div className="empty-message">
-              <h2>◊ REDE NEURAL VAZIA ◊</h2>
-              <p>
-                Nenhuma transmissão detectada. Seja o primeiro a deixar sua
-                marca!
-              </p>
+              <h2>NO SIGNAL DETECTED</h2>
+              <p>The wired is silent. Be the first to transmit.</p>
             </div>
           </div>
         )}
       </div>
 
-      <footer className="cyber-footer">
+      <footer className="lain-footer">
         <div className="footer-content">
-          <div className="footer-info">
-            <p>◊ CYBER MURAL 2000 ◊ INTERFACE DE REDE NEURAL v2.1</p>
-            <p>MELHOR VISUALIZADO NO NETSCAPE NAVIGATOR 4.0+</p>
-          </div>
+          <p>SERIAL EXPERIMENTS LAIN - LAYER 07</p>
+          <p>CLOSE THE WORLD, OPEN THE NEXT</p>
         </div>
       </footer>
 
       <style jsx>{`
-        .cyber-container {
+        .lain-container {
           min-height: 100vh;
-          background: linear-gradient(
-            135deg,
-            #0a0a0a 0%,
-            #1a1a2e 50%,
-            #16213e 100%
-          );
-          color: #00ff00;
+          background: #000;
+          color: #7877c6;
           font-family: "Courier New", monospace;
           position: relative;
           overflow-x: hidden;
         }
 
-        .matrix-bg {
+        .static-bg {
           position: fixed;
           top: 0;
           left: 0;
           width: 100%;
           height: 100%;
-          background-image: radial-gradient(
-              circle at 25% 25%,
-              rgba(0, 255, 0, 0.1) 0%,
+          background: radial-gradient(
+              circle at 20% 80%,
+              rgba(120, 119, 198, 0.1) 0%,
               transparent 50%
             ),
             radial-gradient(
-              circle at 75% 75%,
-              rgba(0, 255, 255, 0.1) 0%,
+              circle at 80% 20%,
+              rgba(255, 119, 198, 0.05) 0%,
               transparent 50%
             );
-          animation: matrix-flow 20s linear infinite;
+          animation: static-movement 20s linear infinite;
           pointer-events: none;
-          z-index: -1;
+          z-index: -2;
         }
 
-        @keyframes matrix-flow {
+        .scan-lines {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(120, 119, 198, 0.03) 2px,
+            rgba(120, 119, 198, 0.03) 4px
+          );
+          pointer-events: none;
+          z-index: -1;
+          animation: scan-lines-move 0.1s linear infinite;
+        }
+
+        @keyframes static-movement {
           0% {
             transform: translateY(0) rotate(0deg);
           }
           100% {
-            transform: translateY(-100px) rotate(360deg);
+            transform: translateY(-50px) rotate(1deg);
           }
         }
 
-        .cyber-header {
-          background: linear-gradient(
-            90deg,
-            rgba(0, 0, 0, 0.9),
-            rgba(0, 255, 0, 0.1),
-            rgba(0, 0, 0, 0.9)
-          );
-          border-bottom: 2px solid #00ff00;
-          padding: 20px;
+        @keyframes scan-lines-move {
+          0% {
+            transform: translateY(0);
+          }
+          100% {
+            transform: translateY(4px);
+          }
+        }
+
+        .lain-header {
+          background: rgba(0, 0, 0, 0.8);
+          border-bottom: 1px solid #333;
+          padding: 30px 20px;
           text-align: center;
           position: relative;
         }
 
-        .cyber-header::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 2px,
-            rgba(0, 255, 0, 0.1) 2px,
-            rgba(0, 255, 0, 0.1) 4px
-          );
-          pointer-events: none;
+        .system-info {
+          display: flex;
+          justify-content: space-between;
+          font-size: 11px;
+          margin-bottom: 20px;
+          color: #666;
         }
 
-        .header-content {
+        .system-status {
+          color: #7877c6;
+        }
+
+        .main-title {
+          font-size: 3rem;
+          margin: 20px 0;
+          font-weight: normal;
+          letter-spacing: 8px;
+        }
+
+        .title-glitch {
           position: relative;
-          z-index: 1;
+          animation: title-glitch 6s infinite;
         }
 
-        .cyber-title {
-          font-size: 2.5rem;
-          margin: 0;
-          text-shadow: 0 0 20px #00ff00;
-          position: relative;
-        }
-
-        .glitch-text {
-          position: relative;
-          animation: glitch-title 3s infinite;
-        }
-
-        .glitch-text::before,
-        .glitch-text::after {
+        .title-glitch::before,
+        .title-glitch::after {
           content: attr(data-text);
           position: absolute;
           top: 0;
@@ -702,19 +727,19 @@ export default function Home() {
           height: 100%;
         }
 
-        .glitch-text::before {
-          animation: glitch-1 0.5s infinite;
-          color: #ff0080;
+        .title-glitch::before {
+          animation: glitch-1 0.4s infinite;
+          color: #ff77c6;
           z-index: -1;
         }
 
-        .glitch-text::after {
-          animation: glitch-2 0.5s infinite;
-          color: #0080ff;
+        .title-glitch::after {
+          animation: glitch-2 0.4s infinite;
+          color: #77c6ff;
           z-index: -2;
         }
 
-        @keyframes glitch-title {
+        @keyframes title-glitch {
           0%,
           100% {
             transform: translate(0);
@@ -734,198 +759,152 @@ export default function Home() {
         }
 
         .subtitle {
-          font-size: 1rem;
-          margin-top: 10px;
-          color: #ff00ff;
-          text-shadow: 0 0 10px #ff00ff;
-          animation: pulse 2s infinite;
+          font-size: 14px;
+          color: #666;
+          letter-spacing: 2px;
+          animation: fade-pulse 3s infinite;
         }
 
-        @keyframes pulse {
+        @keyframes fade-pulse {
           0%,
           100% {
-            opacity: 1;
+            opacity: 0.6;
           }
           50% {
-            opacity: 0.7;
+            opacity: 1;
           }
-        }
-
-        .visitor-counter {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          background: rgba(0, 0, 0, 0.8);
-          border: 1px solid #00ff00;
-          padding: 5px 10px;
-          font-size: 12px;
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-
-        .visitor-counter img {
-          width: 16px;
-          height: 16px;
         }
 
         .main-content {
-          padding: 20px;
-          max-width: 1200px;
+          padding: 40px 20px;
+          max-width: 1000px;
           margin: 0 auto;
         }
 
-        .action-bar {
+        .control-panel {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 30px;
-          flex-wrap: wrap;
-          gap: 15px;
+          margin-bottom: 40px;
+          padding: 20px 0;
+          border-bottom: 1px solid #222;
         }
 
-        .cyber-button {
-          background: linear-gradient(45deg, #000, #333);
-          border: 2px solid #00ff00;
-          color: #00ff00;
-          padding: 12px 24px;
+        .lain-button {
+          background: transparent;
+          border: 1px solid #7877c6;
+          color: #7877c6;
+          padding: 12px 30px;
           font-family: "Courier New", monospace;
-          font-weight: bold;
+          font-size: 12px;
           cursor: pointer;
-          text-transform: uppercase;
           transition: all 0.3s ease;
+          letter-spacing: 2px;
           position: relative;
           overflow: hidden;
         }
 
-        .cyber-button::before {
+        .lain-button::before {
           content: "";
           position: absolute;
           top: 0;
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(0, 255, 0, 0.2),
-            transparent
-          );
+          background: rgba(120, 119, 198, 0.1);
           transition: left 0.5s;
         }
 
-        .cyber-button:hover::before {
+        .lain-button:hover::before {
           left: 100%;
         }
 
-        .cyber-button:hover {
-          box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-          transform: translateY(-2px);
+        .lain-button:hover {
+          box-shadow: 0 0 20px rgba(120, 119, 198, 0.3);
+          color: #fff;
         }
 
-        .add-btn {
-          background: linear-gradient(45deg, #001100, #003300);
+        .lain-button.submit {
+          border-color: #ff77c6;
+          color: #ff77c6;
         }
 
-        .submit-btn {
-          background: linear-gradient(45deg, #110011, #330033);
-          border-color: #ff00ff;
-          color: #ff00ff;
+        .lain-button.submit:hover {
+          box-shadow: 0 0 20px rgba(255, 119, 198, 0.3);
         }
 
-        .submit-btn:hover {
-          box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        .status-display {
+          font-size: 11px;
+          color: #666;
         }
 
-        .status-bar {
-          display: flex;
-          gap: 20px;
-          font-size: 14px;
+        .status-indicator {
+          color: #7877c6;
         }
 
-        .blink {
-          animation: blink 1s infinite;
-          color: #3eff00;
+        .input-terminal {
+          background: rgba(0, 0, 0, 0.6);
+          border: 1px solid #333;
+          padding: 30px;
+          margin-bottom: 40px;
+          box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
         }
 
-        @keyframes blink {
-          0%,
-          50% {
-            opacity: 1;
-          }
-          51%,
-          100% {
-            opacity: 0;
-          }
-        }
-
-        .form-container {
-          background: rgba(0, 0, 0, 0.8);
-          border: 2px solid #00ff00;
-          padding: 20px;
-          margin-bottom: 30px;
-          box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
-        }
-
-        .cyber-form {
+        .terminal-form {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 25px;
         }
 
-        .form-group {
+        .input-group {
           display: flex;
           flex-direction: column;
           gap: 8px;
         }
 
-        .form-group label {
-          color: #00ff00;
-          font-weight: bold;
-          text-transform: uppercase;
+        .input-group label {
+          color: #7877c6;
+          font-size: 11px;
+          letter-spacing: 1px;
         }
 
-        .cyber-input,
-        .cyber-textarea {
-          background: rgba(0, 0, 0, 0.9);
-          border: 1px solid #00ff00;
-          color: #00ff00;
-          padding: 12px;
+        .terminal-input,
+        .terminal-textarea {
+          background: transparent;
+          border: none;
+          border-bottom: 1px solid #333;
+          color: #7877c6;
+          padding: 10px 0;
           font-family: "Courier New", monospace;
-          font-size: 14px;
+          font-size: 13px;
           resize: vertical;
         }
 
-        .cyber-input:focus,
-        .cyber-textarea:focus {
+        .terminal-input:focus,
+        .terminal-textarea:focus {
           outline: none;
-          box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-          border-color: #00ffff;
+          border-bottom-color: #7877c6;
+          box-shadow: 0 1px 0 0 rgba(120, 119, 198, 0.3);
         }
 
-        .notes-grid {
+        .message-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 20px;
-          margin-bottom: 40px;
+          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+          gap: 30px;
+          margin-bottom: 60px;
         }
 
-        .note-card {
-          background: linear-gradient(
-            135deg,
-            rgba(0, 0, 0, 0.9),
-            rgba(0, 50, 0, 0.3)
-          );
-          border: 2px solid #00ff00;
-          padding: 20px;
+        .message-card {
+          background: rgba(0, 0, 0, 0.4);
+          border: 1px solid #222;
+          padding: 25px;
           position: relative;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-          overflow: hidden;
           cursor: pointer;
+          box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.3);
         }
 
-        .note-card::before {
+        .message-card::before {
           content: "";
           position: absolute;
           top: 0;
@@ -935,175 +914,136 @@ export default function Home() {
           background: linear-gradient(
             90deg,
             transparent,
-            rgba(0, 255, 0, 0.1),
+            rgba(120, 119, 198, 0.05),
             transparent
           );
-          transition: left 0.6s ease;
-          z-index: 1;
+          transition: left 0.8s ease;
           pointer-events: none;
         }
 
-        .note-card:hover::before {
+        .message-card:hover::before {
           left: 100%;
         }
 
-        .note-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 0 25px rgba(0, 255, 0, 0.4);
-          border-color: #00ffff;
+        .message-card:hover {
+          border-color: #7877c6;
+          box-shadow: 0 0 30px rgba(120, 119, 198, 0.1);
         }
 
-        .note-header {
+        .message-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 15px;
+          margin-bottom: 20px;
           padding-bottom: 10px;
-          border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+          border-bottom: 1px solid #222;
         }
 
-        .note-id {
-          background: rgba(0, 255, 0, 0.2);
-          padding: 4px 8px;
-          font-size: 12px;
-          border: 1px solid #00ff00;
-          color: #00ff00;
+        .message-id {
+          font-size: 10px;
+          color: #666;
+          letter-spacing: 1px;
         }
 
-        .delete-btn {
-          background: rgba(255, 0, 0, 0.2);
-          border: 1px solid #ff0000;
-          color: #ff0000;
+        .delete-button {
+          background: transparent;
+          border: 1px solid #444;
+          color: #666;
           padding: 4px 8px;
           cursor: pointer;
           font-family: "Courier New", monospace;
           transition: all 0.3s ease;
+          font-size: 12px;
         }
 
-        .delete-btn:hover {
-          background: rgba(255, 0, 0, 0.4);
-          box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        .delete-button:hover {
+          border-color: #ff77c6;
+          color: #ff77c6;
+          box-shadow: 0 0 10px rgba(255, 119, 198, 0.3);
         }
 
-        .note-title {
-          color: #00ffff;
+        .message-title {
+          color: #7877c6;
           margin: 0 0 15px 0;
-          font-size: 1.2rem;
-          text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+          font-size: 16px;
+          font-weight: normal;
+          letter-spacing: 1px;
         }
 
-        .note-description {
-          color: #cccccc;
+        .message-content {
+          color: #999;
           line-height: 1.6;
-          margin: 0 0 15px 0;
-          word-wrap: break-word;
+          margin: 0 0 20px 0;
+          font-size: 13px;
         }
 
-        .note-footer {
-          border-top: 1px solid rgba(0, 255, 0, 0.3);
+        .message-footer {
+          border-top: 1px solid #222;
           padding-top: 10px;
         }
 
         .timestamp {
-          font-size: 12px;
-          color: #888;
-          text-transform: uppercase;
+          font-size: 10px;
+          color: #555;
+          letter-spacing: 1px;
         }
 
-        .empty-state {
+        .empty-wired {
           text-align: center;
-          padding: 60px 20px;
+          padding: 80px 20px;
         }
 
         .empty-message h2 {
-          color: #ff00ff;
-          font-size: 2rem;
+          color: #7877c6;
+          font-size: 24px;
           margin-bottom: 20px;
-          text-shadow: 0 0 15px #ff00ff;
+          font-weight: normal;
+          letter-spacing: 3px;
         }
 
         .empty-message p {
-          color: #888;
-          font-size: 1.1rem;
+          color: #666;
+          font-size: 14px;
+          letter-spacing: 1px;
         }
 
-        .cyber-footer {
-          background: linear-gradient(
-            90deg,
-            rgba(0, 0, 0, 0.9),
-            rgba(0, 255, 0, 0.1),
-            rgba(0, 0, 0, 0.9)
-          );
-          border-top: 2px solid #00ff00;
+        .lain-footer {
+          background: rgba(0, 0, 0, 0.8);
+          border-top: 1px solid #222;
           padding: 30px 20px;
-          margin-top: 40px;
-        }
-
-        .footer-content {
-          max-width: 1200px;
-          margin: 0 auto;
           text-align: center;
         }
 
-        .footer-links {
-          display: flex;
-          justify-content: center;
-          gap: 30px;
-          margin-bottom: 20px;
-          flex-wrap: wrap;
+        .footer-content {
+          color: #444;
+          font-size: 10px;
+          letter-spacing: 2px;
         }
 
-        .footer-link {
-          color: #00ff00;
-          text-decoration: none;
-          padding: 8px 16px;
-          border: 1px solid #00ff00;
-          transition: all 0.3s ease;
-          text-transform: uppercase;
-          font-weight: bold;
-        }
-
-        .footer-link:hover {
-          background: rgba(0, 255, 0, 0.2);
-          box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-        }
-
-        .footer-info {
-          color: #888;
-          font-size: 12px;
-        }
-
-        .footer-info p {
+        .footer-content p {
           margin: 5px 0;
         }
 
         @media (max-width: 768px) {
-          .cyber-title {
-            font-size: 1.8rem;
+          .main-title {
+            font-size: 2rem;
+            letter-spacing: 4px;
           }
 
-          .action-bar {
+          .control-panel {
             flex-direction: column;
+            gap: 20px;
             align-items: stretch;
           }
 
-          .status-bar {
-            justify-content: center;
-          }
-
-          .notes-grid {
+          .message-grid {
             grid-template-columns: 1fr;
           }
 
-          .visitor-counter {
-            position: static;
-            margin-top: 15px;
-            align-self: center;
-          }
-
-          .footer-links {
+          .system-info {
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
+            text-align: center;
           }
         }
       `}</style>
