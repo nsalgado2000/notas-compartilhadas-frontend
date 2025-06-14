@@ -12,6 +12,7 @@ export default function Home() {
   const [newNota, setNewNota] = useState({ title: "", description: "" });
   const [showForm, setShowForm] = useState(false);
   const [editingNota, setEditingNota] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   // Snake Game State
   const [snake, setSnake] = useState(INITIAL_SNAKE);
@@ -21,6 +22,11 @@ export default function Home() {
   const [score, setScore] = useState(0);
 
   const formRef = useRef(null);
+
+  const showNotification = (type, message) => {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 3000);
+  };
 
   useEffect(() => {
     fetchNotas();
@@ -137,11 +143,13 @@ export default function Home() {
           `https://notas-compartilhadas.onrender.com/api/notas/${editingNota._id}`,
           newNota
         );
+        showNotification("success", "TRANSMISSION UPDATED");
       } else {
         await axios.post(
           "https://notas-compartilhadas.onrender.com/api/notas",
           newNota
         );
+        showNotification("success", "TRANSMISSION SENT");
       }
 
       setNewNota({ title: "", description: "" });
@@ -150,6 +158,7 @@ export default function Home() {
       fetchNotas();
     } catch (error) {
       console.error("Erro ao salvar nota:", error);
+      showNotification("error", "CONNECTION FAILED - UNABLE TO TRANSMIT");
     }
   };
 
@@ -159,9 +168,11 @@ export default function Home() {
         `https://notas-compartilhadas.onrender.com/api/notas/${id}`
       );
 
+      showNotification("success", "TRANSMISSION DELETED");
       fetchNotas();
     } catch (error) {
       console.error("Erro ao deletar nota:", error);
+      showNotification("error", "CONNECTION FAILED - UNABLE TO DELETE");
     }
   };
 
@@ -620,6 +631,17 @@ export default function Home() {
     <div className="lain-container">
       <div className="static-bg"></div>
       <div className="scan-lines"></div>
+
+      {notification && (
+        <div className={`notification ${notification.type}`}>
+          <div className="notification-content">
+            <span className="notification-icon">
+              {notification.type === "success" ? "●" : "⚠"}
+            </span>
+            <span className="notification-message">{notification.message}</span>
+          </div>
+        </div>
+      )}
 
       <header className="lain-header">
         <div className="header-content">
@@ -1153,6 +1175,72 @@ export default function Home() {
           margin: 5px 0;
         }
 
+        .notification {
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 1000;
+          min-width: 300px;
+          max-width: 500px;
+          background: rgba(0, 0, 0, 0.95);
+          border: 1px solid;
+          padding: 15px 20px;
+          font-family: "Courier New", monospace;
+          font-size: 12px;
+          letter-spacing: 1px;
+          animation: notification-slide-in 0.3s ease-out;
+          box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .notification.success {
+          border-color: #7877c6;
+          color: #7877c6;
+          box-shadow: 0 0 30px rgba(120, 119, 198, 0.3);
+        }
+
+        .notification.error {
+          border-color: #ff77c6;
+          color: #ff77c6;
+          box-shadow: 0 0 30px rgba(255, 119, 198, 0.3);
+        }
+
+        .notification-content {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .notification-icon {
+          font-size: 14px;
+          animation: notification-pulse 2s infinite;
+        }
+
+        .notification-message {
+          flex: 1;
+        }
+
+        @keyframes notification-slide-in {
+          0% {
+            transform: translateX(-50%) translateY(-100%);
+            opacity: 0;
+          }
+          100% {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes notification-pulse {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.6;
+          }
+        }
+
         @media (max-width: 768px) {
           .main-title {
             font-size: 2rem;
@@ -1173,6 +1261,13 @@ export default function Home() {
             flex-direction: column;
             gap: 10px;
             text-align: center;
+          }
+
+          .notification {
+            min-width: 280px;
+            max-width: 90vw;
+            font-size: 11px;
+            padding: 12px 15px;
           }
         }
       `}</style>
