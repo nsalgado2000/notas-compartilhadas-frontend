@@ -168,36 +168,138 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="loading-container">
+      <div
+        className="loading-container"
+        style={{
+          minHeight: "100vh",
+          background: "#000",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: '"Courier New", monospace',
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
         <div className="static-overlay"></div>
-        <div className="terminal-window">
-          <div className="terminal-header">
-            <span className="terminal-dots">● ● ●</span>
-            <span className="terminal-title">CONNECTING TO THE WIRED...</span>
+        <div
+          className="terminal-window"
+          style={{
+            background: "rgba(0, 0, 0, 0.95)",
+            border: "1px solid #7877c6",
+            minWidth: "600px",
+            maxWidth: "700px",
+            position: "relative",
+            zIndex: 2,
+          }}
+        >
+          <div
+            className="terminal-header"
+            style={{
+              background: "linear-gradient(90deg, #1a1a1a, #2a2a2a)",
+              color: "#7877c6",
+              padding: "8px 16px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              fontSize: "11px",
+              borderBottom: "1px solid #333",
+            }}
+          >
+            <span className="terminal-dots" style={{ color: "#ff6b6b" }}>
+              ● ● ●
+            </span>
+            <span className="terminal-title" style={{ color: "#7877c6" }}>
+              CONNECTING TO THE WIRED...
+            </span>
           </div>
-          <div className="terminal-content">
-            <div className="loading-text">
+          <div
+            className="terminal-content"
+            style={{
+              padding: "30px",
+              color: "#7877c6",
+            }}
+          >
+            <div
+              className="loading-text"
+              style={{ textAlign: "center", marginBottom: "40px" }}
+            >
               <div
                 className="glitch-text"
                 data-text="PRESENT DAY... PRESENT TIME..."
+                style={{
+                  fontSize: "16px",
+                  position: "relative",
+                  marginBottom: "20px",
+                }}
               >
                 PRESENT DAY... PRESENT TIME...
               </div>
-              <div className="progress-container">
-                <div className="progress-bar">
+              <div className="progress-container" style={{ marginTop: "20px" }}>
+                <div
+                  className="progress-bar"
+                  style={{
+                    width: "100%",
+                    height: "2px",
+                    background: "rgba(120, 119, 198, 0.2)",
+                    marginBottom: "10px",
+                    overflow: "hidden",
+                  }}
+                >
                   <div className="progress-fill"></div>
                 </div>
-                <div className="progress-text">LOADING PROTOCOL 7...</div>
+                <div
+                  className="progress-text"
+                  style={{
+                    fontSize: "12px",
+                    color: "#666",
+                    textAlign: "center",
+                  }}
+                >
+                  LOADING PROTOCOL 7...
+                </div>
               </div>
             </div>
 
-            <div className="snake-game">
-              <div className="game-title">NAVI SYSTEM</div>
-              <div className="game-info">
+            <div
+              className="snake-game"
+              style={{ textAlign: "center", marginTop: "30px" }}
+            >
+              <div
+                className="game-title"
+                style={{
+                  color: "#7877c6",
+                  fontSize: "14px",
+                  marginBottom: "15px",
+                  letterSpacing: "2px",
+                }}
+              >
+                NAVI SYSTEM
+              </div>
+              <div
+                className="game-info"
+                style={{
+                  marginBottom: "20px",
+                  fontSize: "11px",
+                  color: "#666",
+                }}
+              >
                 SCORE: {score} | STATUS:{" "}
                 {gameRunning ? "ACTIVE" : "PRESS SPACE TO INITIALIZE"}
               </div>
-              <div className="game-board">
+              <div
+                className="game-board"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: `repeat(${SNAKE_GAME_SIZE}, 1fr)`,
+                  gap: "1px",
+                  background: "#111",
+                  border: "1px solid #333",
+                  margin: "0 auto",
+                  width: "300px",
+                  height: "300px",
+                }}
+              >
                 {Array.from({
                   length: SNAKE_GAME_SIZE * SNAKE_GAME_SIZE,
                 }).map((_, index) => {
@@ -214,11 +316,27 @@ export default function Home() {
                       className={`game-cell ${isSnake ? "snake" : ""} ${
                         isFood ? "food" : ""
                       }`}
+                      style={{
+                        background: isSnake
+                          ? "#7877c6"
+                          : isFood
+                          ? "#ff77c6"
+                          : "#000",
+                        aspectRatio: "1",
+                      }}
                     />
                   );
                 })}
               </div>
-              <div className="game-controls">
+              <div
+                className="game-controls"
+                style={{
+                  marginTop: "20px",
+                  fontSize: "10px",
+                  color: "#444",
+                  letterSpacing: "1px",
+                }}
+              >
                 USE ARROW KEYS TO NAVIGATE THE WIRED
               </div>
             </div>
